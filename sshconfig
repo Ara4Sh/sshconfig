@@ -1,0 +1,109 @@
+#!/bin/bash
+# Copyright (C) 2015 Arash Shams <xsysxpert@gmail.com>.
+#
+#   This program is free software: you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation, either version 3 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+CONFIGFILE="$HOME/.ssh/config"
+
+if [ ! -f $CONFIGFILE ]
+then
+	mkdir -p $HOME/.ssh && touch $CONFIGFILE
+fi
+	
+do_add_process() {
+if [[ "$#" -gt 6 || "$#" -lt 4 ]]
+then
+	echo "Usage : $0 add  [NAME] [USERNAME] [HOSTNAME] [IdentityKey] [PORT] "
+	echo " IdentityKey and PORT are not necessary "
+	exit 1
+fi
+name=$2
+username=$3
+hostname=$4
+id=$5
+port=${6-22}
+if [ -n "$id" ]
+then
+cat << EOF >> $CONFIGFILE
+
+#begin$name
+Host $name
+	HostName $hostname
+	User $username
+	Port $port
+	IdentityFile $id
+#end$name
+EOF
+else
+cat << aEOF >> $CONFIGFILE
+
+#begin$name
+Host $name
+	HostName $hostname
+	User $username
+	Port $port
+#end$name
+aEOF
+fi
+exit 0
+}
+
+do_remove_process() {
+if [ "$#" != 2 ]
+then
+	echo "Usage : $0 remove [NAME]"
+fi
+name=$2
+sed -ie "/^\#begin$name/,/^\#end$name/d" $CONFIGFILE
+}
+
+do_list_process() {
+if [ "$#" != 1 ]
+then
+	echo "Usage : $0 list"
+fi
+echo $(awk '/^Host/ {print $2;}' $CONFIGFILE)
+}
+
+do_show_usage() {
+	echo -e "\nAdd a new Host: $0 add/-a/a  [NAME] [USERNAME] [HOSTNAME] [IdentityKey] [PORT] "
+	echo -e "IdentityKey and PORT are not necessary\n"
+	echo -e "Remove a Host: $0 remove/-r/r  [NAME] \n"
+	echo -e "List all hosts: $0 list/ls/show\n"
+	echo -e "Print Version and info: $0 version/-v/v/-V\n"
+}
+
+do_show_version() {
+	echo "Create by Arash Shams <xsysxpert@gmail.com> Under MIT License"
+	echo "Version 1.0 Stable"
+	echo "Fork me at Github <https://github.com/Ara4Sh/sshconfig>"
+}
+
+action=$1
+case $action in
+	add | -a | a)
+		do_add_process $@
+		;;
+	remove | -r | r)
+		do_remove_process $@
+		;;
+	list | ls | show)
+		do_list_process $@
+		;;
+	version | -v | v | -V)
+		do_show_version $@
+		;;
+	*)
+		do_show_usage $@
+		;;
+esac
