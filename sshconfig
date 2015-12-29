@@ -84,7 +84,7 @@ do_show_usage() {
 }
 
 do_show_version() {
-	echo "Create by Arash Shams <xsysxpert@gmail.com> Under MIT License"
+	echo "Create by Arash Shams <xsysxpert@gmail.com>" 
 	echo "Version 1.0 Stable"
 	echo "Fork me at Github <https://github.com/Ara4Sh/sshconfig>"
 }
