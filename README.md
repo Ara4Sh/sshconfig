@@ -9,12 +9,12 @@ Binaries coming soon .
 ##Add a Host:
 to add a host use the following command:
 
-``` sshconfig add [NAME] [USERNAME] [HOSTNAME] [IdentityKey] [PORT] ```
+``` sshconfig add NAME USERNAME HOSTNAME [IdentityKey] [PORT] ```
 
-Using Identity Key and port are not necessary.
 
-Example : 
-
+#Example : 
+##Add new Host block:
+To add one new Host block
 ``` sshconfig add arash root 192.168.0.100```
 
 ``` sshconfig add arash1 root 192.168.0.101 /home/arash/.ssh/id_rsa```
@@ -26,13 +26,13 @@ Example :
 ##Remove a Host:
 To remove a Host just a name is enough
 
-``` sshconfig remove [NAME]```
+``` sshconfig remove NAME```
 
 ``` sshconfig remove arash1 ```
 
 ``` sshconfig -r``` or ```sshconfig r ``` also works.
 
-#List Existing Hosts 
+##List Existing Hosts 
 Show Existing Hosts 
 
 ```sshconfig list```
@@ -41,7 +41,7 @@ Show Existing Hosts
 
 ```sshconfig show```
 
-#Version and information 
+##Version and information 
 
 ```sshconfig version```
 
