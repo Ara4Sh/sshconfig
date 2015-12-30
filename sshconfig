@@ -16,24 +16,46 @@
 
 CONFIGFILE="$HOME/.ssh/config"
 
-if [ ! -f $CONFIGFILE ]
-then
-	mkdir -p $HOME/.ssh && touch $CONFIGFILE
+if [ ! -f $CONFIGFILE ]; then
+    mkdir -p $HOME/.ssh && touch $CONFIGFILE
 fi
+
+is_integer() {
+    printf "%d" $1 > /dev/null 2>&1
+    return $?
+}
 	
 do_add_process() {
-    if [[ "$#" -gt 6 || "$#" -lt 4 ]]; then
+    if [[ "$#" -eq 6 || "$#" -eq 4 ]]; then
+	name=$2
+	username=$3
+	hostname=$4
+	if [[ -n $6 ]]; then
+	    id=$5
+	    port=$6
+	else
+	    port=22
+	fi
+    elif [[ "$#" -eq 5 ]]; then
+	if is_integer $5; then
+	    name=$2
+	    username=$3
+	    hostname=$4
+	    port=$5
+	    
+	else
+	    name=$2
+	    username=$3
+	    hostname=$4
+	    id=$5
+	    port=22
+	fi
+    else
 	echo "Usage : $0 $1 NAME USERNAME HOSTNAME [IdentityKey] [PORT]"
 	exit 1
     fi
 
-    name=$2
-    username=$3
-    hostname=$4
-    id=$5
-    port=${6-22}
-
-    if [[ $(do_list_process | grep --count $name$) != 0 ]]; then
+    if [[ $(do_list_process | grep --count "^$name$") != 0 ]]; then
 	echo "This name is already used. Try again with another name."
 	exit 1
     fi
