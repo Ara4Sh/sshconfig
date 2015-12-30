@@ -45,11 +45,17 @@ Show Existing Hosts
 
 ```sshconfig version```
 
+#Change log
+Version 1.1:
+- Better coding
+- Bug fixes
+- Checking for duplicate entries.
+
 
 #To do:
 
 Better documentation
 
-duplicate entries
+~~duplicate entries~~
 
 New Featurs 
