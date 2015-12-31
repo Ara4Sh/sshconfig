@@ -1,10 +1,12 @@
 # sshconfig
 Minimal command to Add/Remove/list ssh aliases in $HOME/.ssh/config
+to contribute please fork add your code and make a pull request. feel free to add something new and helpful
 
 #Installation
 ``` curl -L http://git.io/sshconfig | bash ```
 
-Available on Linux , BSD and OSX 
+Available on Linux , BSD and OSX
+ 
 #Usage
 ##Add a Host:
 to add a host use the following command:
@@ -46,16 +48,16 @@ Show Existing Hosts
 ```sshconfig version```
 
 #Change log
-Version 1.2:
-- IdentityKey and Port conflicts solved
-
+Version 1.3:
+- Checking for existing of name before delete process
+- list checks for argument again
 
 #To do:
+
+Adding more information when you use list command  
 
 Better documentation
 
 ~~duplicate entries~~
 
 ~~IdentityKey and Port conflicts~~
-
-New Featurs 

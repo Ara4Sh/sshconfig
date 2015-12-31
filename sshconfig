@@ -89,11 +89,19 @@ do_remove_process() {
 	exit 1
     fi
     name=$2
-    sed -ie "/^\#begin $name$/,/^\#end $name$/d" $CONFIGFILE
-    exit 0
+    if [[ $(do_list_process | grep --count "^$name$") != 0 ]]; then
+    	sed -ie "/^\#begin $name$/,/^\#end $name$/d" $CONFIGFILE
+    	exit 0
+    else
+	echo "Sorry, \"$name\" is not in list"
+    fi
 }
 
 do_list_process() {
+    if [ "$#" != 1 ]; then
+	echo "Usage : $0 list (ls/show) "
+	exit 1
+    fi
     grep "^Host" $CONFIGFILE | cut -f2- -d " "
     exit 0
 }
@@ -108,7 +116,7 @@ do_show_usage() {
 
 do_show_version() {
 	echo "Create by Arash Shams <xsysxpert@gmail.com>" 
-	echo "Version 1.2 Stable"
+	echo "Version 1.3 Stable"
 	echo "Fork me at Github <https://github.com/Ara4Sh/sshconfig>"
 }
 
