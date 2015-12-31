@@ -2,9 +2,9 @@
 Minimal command to Add/Remove/list ssh aliases in $HOME/.ssh/config
 
 #Installation
-It is a simple Shellscript to configure a file so download and place it in your $PATH. 
-Binaries coming soon .
+``` curl -L http://git.io/sshconfig | bash ```
 
+Available on Linux , BSD and OSX 
 #Usage
 ##Add a Host:
 to add a host use the following command:
