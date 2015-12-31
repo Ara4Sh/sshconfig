@@ -46,10 +46,8 @@ Show Existing Hosts
 ```sshconfig version```
 
 #Change log
-Version 1.1:
-- Better coding
-- Bug fixes
-- Checking for duplicate entries.
+Version 1.2:
+- IdentityKey and Port conflicts solved
 
 
 #To do:
@@ -57,5 +55,7 @@ Version 1.1:
 Better documentation
 
 ~~duplicate entries~~
+
+~~IdentityKey and Port conflicts~~
 
 New Featurs 
