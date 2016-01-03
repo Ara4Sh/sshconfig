@@ -116,7 +116,7 @@ do_show_usage() {
 
 do_show_version() {
 	echo "Create by Arash Shams <xsysxpert@gmail.com>" 
-	echo "Version 1.3 Stable"
+	echo "Version 1.4 Stable"
 	echo "Fork me at Github <https://github.com/Ara4Sh/sshconfig>"
 }
 
@@ -129,13 +129,13 @@ case $action in
 	    do_remove_process $@
 	    ;;
 	list | ls | show)
-	    do_list_process
+	    do_list_process $@
 	    ;;
 	version | -v | v | -V)
 	    do_show_version $@
 	    ;;
 	help | -h | h)
-	    do_show_usage
+	    do_show_usage $@
 	    ;;
 	*)
 	    do_show_usage $@
