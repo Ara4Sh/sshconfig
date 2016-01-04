@@ -18,25 +18,32 @@ to add a host use the following command:
 #Example : 
 ##Add new Host block:
 To add one new Host block
-``` sshconfig add arash root 192.168.0.100
-sshconfig add arash1 root 192.168.0.101 /home/arash/.ssh/id_rsa
-sshconfig add arash2 root 192.168.0.102 /home/arash/.ssh/id_rsa 2223```
+``` sshconfig add arash root 192.168.0.100 ```
+
+``` sshconfig add arash1 root 192.168.0.101 /home/arash/.ssh/id_rsa ```
+
+``` sshconfig add arash2 root 192.168.0.102 /home/arash/.ssh/id_rsa 2223 ```
+
+``` sshconfig add arash root 192.168.0.103 2222 ```
+
 
 ##Remove a Host:
 To remove a Host just a name is enough
 
-``` sshconfig remove NAME
-sshconfig remove arash1 ```
+``` sshconfig remove NAME ```
+
+``` sshconfig remove arash1 ```
 
 ##List Existing Hosts 
 Show Existing Hosts 
 
-```sshconfig list```
+``` sshconfig list ```
 
 Show information about a host
 
-``` sshconfig list HOST
-sshconfig list arash1 ```
+``` sshconfig list HOST ```
+
+``` sshconfig list arash1 ```
 
 ##Version and information 
 
