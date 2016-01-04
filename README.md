@@ -1,5 +1,6 @@
 # sshconfig
 Minimal command to Add/Remove/list ssh aliases in $HOME/.ssh/config
+
 to contribute please fork add your code and make a pull request. feel free to add something new and helpful
 
 #Installation
@@ -17,47 +18,48 @@ to add a host use the following command:
 #Example : 
 ##Add new Host block:
 To add one new Host block
-``` sshconfig add arash root 192.168.0.100```
-
-``` sshconfig add arash1 root 192.168.0.101 /home/arash/.ssh/id_rsa```
-
-``` sshconfig add arash2 root 192.168.0.102 /home/arash/.ssh/id_rsa 2223```
-
-``` sshconfig -a``` or ``` sshconfig a``` also works.
+``` sshconfig add arash root 192.168.0.100
+sshconfig add arash1 root 192.168.0.101 /home/arash/.ssh/id_rsa
+sshconfig add arash2 root 192.168.0.102 /home/arash/.ssh/id_rsa 2223```
 
 ##Remove a Host:
 To remove a Host just a name is enough
 
-``` sshconfig remove NAME```
-
-``` sshconfig remove arash1 ```
-
-``` sshconfig -r``` or ```sshconfig r ``` also works.
+``` sshconfig remove NAME
+sshconfig remove arash1 ```
 
 ##List Existing Hosts 
 Show Existing Hosts 
 
 ```sshconfig list```
 
-```sshconfig ls```
+Show information about a host
 
-```sshconfig show```
+``` sshconfig list HOST
+sshconfig list arash1 ```
 
 ##Version and information 
 
 ```sshconfig version```
 
 #Change log
-Version 1.3:
-- Checking for existing of name before delete process
-- list checks for argument again
-
+Version 1.5:
+- List now shows all hosts with full information
+- Show details of a host
+- Change checking process
+- Checking for host already exist
+ 
 #To do:
 
-Adding more information when you use list command  
-
 Better documentation
+
+Colorful output
+
+Connect to a host using sshconfig
+
+~~adding more information when you use list command~~
 
 ~~duplicate entries~~
 
 ~~IdentityKey and Port conflicts~~
+

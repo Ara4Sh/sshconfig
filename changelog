@@ -1,3 +1,12 @@
+Version 1.5:
+- List now shows all hosts with full information
+- Show details of a host
+- Change checking process
+- Checking for host already exist
+
+Version 1.4:
+- Fixing minor bugs
+
 Version 1.3:
 - Checking for existing of name before delete process
 - list checks for argument again
