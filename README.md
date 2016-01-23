@@ -66,3 +66,5 @@ Connect to a host using sshconfig
 
 ~~IdentityKey and Port conflicts~~
 
+#ScreenShot
+![alt scrsht](https://raw.githubusercontent.com/Ara4Sh/sshconfig/master/screenshot.png)
