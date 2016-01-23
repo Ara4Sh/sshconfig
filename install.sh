@@ -14,7 +14,9 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 sshconfig=`which sshconfig`
-
+CONFIGFILE="$HOME/.ssh/config"
+BACKUPFILE="$HOME/.ssh/config.bak"
+TEMPFILE="$HOME/.ssh/.install.tmp"
 #Setup source url
 src="https://raw.githubusercontent.com/Ara4Sh/sshconfig/master/sshconfig"
 
@@ -26,9 +28,39 @@ wget=`which wget`
 curl=`which curl`
 sudo=`which sudo`
 
-if [[ -f $sshconfig ]]; then
-	echo "sshconfig is already installed, in 5 seconds it will be update or you can use CTRL-C to cancel"
+system() {
+    echo "$@" >> $LOG
+    eval "$@" 2>> $LOG
+}
+
+if [[ -f $sshconfig ]] && [[ $(sshconfig -v | grep --count 1.[1..5]) != 0 ]]; then
+	echo "you are using old sshconfig, in 5 seconds your sshconfig will be upgrade and your config file ready to use or you can use CTRL-C to cancel"
 	sleep 5
+	system "cp $CONFIGFILE $BACKUPFILE"
+	system "sed -e 's/^#.*//' $CONFIGFILE > $TEMPFILE"
+	system "sed '/^$/N;/^\n$/D' $TEMPFILE > $CONFIGFILE"
+	system "rm $TEMPFILE"
+	system "sudo rm -f $sshconfig"
+elif [[ -f sshconfig && $oldsshconfig = 0 ]];then
+	echo "sshconfig already installed, in 5 seconds it will be upgrade or you can use CTRL-C to cancel"
+	sleep 5
+	system "sudo rm -f $sshconfig"
+else
+	echo -e "Seems this is your first time using SSHCONFIG\n"
+	echo -e "Please Remember each block of Host in your ~/.ssh/config file"
+	echo -e "must seperate with a white space if not SSHCONFIG cant work correctly"
+	echo -e "for example\n"
+	echo -e "Host arash
+	HostName 172.18.0.2
+	User	root
+	Port	22
+	Identity /home/arash/arash.pem
+	
+Host shams
+	HostName 172.18.0.3
+	User root
+	Port 2223"
+	echo -e "\nIf you dont have any Hosts in your config file ignore this message"
 fi
 
 if [[ ! -f $sudo ]]; then
@@ -36,22 +68,18 @@ if [[ ! -f $sudo ]]; then
 	exit 1
 fi
 
-system() {
-    echo "$@" >> $LOG
-    eval "$@" 2>> $LOG 
-}
-
 if [[ -f $wget ]]; then
-	system "sudo $wget -O /usr/local/bin/sshconfig $src"
+	system "sudo $wget -O /usr/local/bin/ssc $src"
 elif [[ -f $curl ]]; then
-	system "sudo $curl -o /usr/local/bin $src"
+	system "sudo $curl -o /usr/local/bin/ssc $src"
 else
 	echo "cURL and wget not found! please install one of them"
 	exit 1
 fi
-system "sudo chmod 755 /usr/local/bin/sshconfig"
+system "sudo chmod 755 /usr/local/bin/ssc"
+system "ln -s /usr/local/bin/ssc /usr/local/bin/sshconfig"
 if [[ $? -eq 0 ]]; then
-	echo "Done, Now you can run \"sshconfig help\""
+	echo "Thank you for using sshconfig , Now you can run \"ssc help\""
 else
 	echo "Something wrong!!"
 fi

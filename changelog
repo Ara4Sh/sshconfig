@@ -1,3 +1,10 @@
+Version 1.6:
+- Remove comments from confg file
+- New name : ssc
+- Now lists has colored output
+- New install script
+- Fixing config file in install script
+
 Version 1.5:
 - List now shows all hosts with full information
 - Show details of a host

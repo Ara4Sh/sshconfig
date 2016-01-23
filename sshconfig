@@ -14,6 +14,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 CONFIGFILE="$HOME/.ssh/config"
+TEMPFILE="$HOME/.ssh/.ssctemp"
 
 if [ ! -f $CONFIGFILE ]; then
     mkdir -p $HOME/.ssh && touch $CONFIGFILE
@@ -55,7 +56,7 @@ do_add_process() {
 	    port=22
 	fi
     else
-	echo "Usage : $0 $1 NAME USERNAME HOSTNAME [IdentityKey] [PORT]"
+	echo "Usage : ssc $1 NAME USERNAME HOSTNAME [IdentityKey] [PORT]"
 	exit 1
     fi
 
@@ -66,22 +67,20 @@ do_add_process() {
     
     if [ -n "$id" ]; then
 	cat << EOB >> $CONFIGFILE
-#begin $name
+
 Host $name
 	HostName $hostname
 	User $username
 	Port $port
 	IdentityFile $id
-#end $name
 EOB
     else
 	cat << EOB >> $CONFIGFILE
-#begin $name
+
 Host $name
 	HostName $hostname
 	User $username
 	Port $port
-#end $name
 EOB
     fi
     exit 0
@@ -89,12 +88,12 @@ EOB
 
 do_remove_process() {
     if [ "$#" != 2 ]; then
-	echo "Usage : $0 $1 NAME"
+	echo "Usage : ssc $1 NAME"
 	exit 1
     fi
     name=$2
     if [[ $(do_check_names | grep --count "^$name$") != 0 ]]; then
-    	sed -ie "/^\#begin $name$/,/^\#end $name$/d" $CONFIGFILE
+	sed -ie "/^Host $name$/,/^$/d" $CONFIGFILE
     	exit 0
     else
 	echo "Sorry, \"$name\" is not in list"
@@ -105,28 +104,28 @@ do_list_process() {
     if [ -n "$2" ]; then
      	name=$2
 	if [[ $(do_check_names | grep --count "^$name$") != 0 ]]; then
-    		awk '/^#begin '"$name"'/{Infos="";next}/^#end '"$name"'/{ print Infos;next}{Infos = Infos ($1~/^Host$/ ? "" : "\t") $1 ": " $2}' $CONFIGFILE
+		awk -v name="$name" -v green="\033[0;32m" -v reset="\033[0m" -v RS='' 'index($0, name) { for (i = 1; i < NF; i += 2) { printf("%s%s%s  %s%s", green, $i, reset, $(i + 1), (i < NF -2)? "  ": "\n") } exit }' $CONFIGFILE
 		exit 0
 	else
 		echo "Sorry, \"$name\" is not in list"
 		exit 1
 	fi
     else
-    	awk '/^#begin/{Infos="";next}/^#end/{ print Infos;next}{Infos = Infos ($1~/^Host$/ ? "" : " ") $1 ": " $2}' $CONFIGFILE
+	 awk -v name="$name" -v green="\033[0;32m" -v reset="\033[0m" -v RS='' '{ for (i = 1; i < NF; i += 2) { printf("%s%s%s  %s%s", green, $i, reset, $(i + 1), (i < NF -2)? "  ": "\n") } }' $CONFIGFILE
     fi
 }
 
 do_show_usage() {
-	echo -e "Add a new Host: sshconfig add/-a/a NAME USERNAME HOSTNAME [IdentityKey] [PORT] "
-	echo -e "Remove a Host: sshconfig remove/-r/r  NAME"
-	echo -e "List all exist hosts: sshconfig list/ls/show"
-	echo -e "Print Version and info: sshconfig version/-v/v/-V"
-	echo -e "Print this message and exit: sshconfig help/-h/h"
+	echo -e "Add a new Host: ssc add/-a/a NAME USERNAME HOSTNAME [IdentityKey] [PORT] "
+	echo -e "Remove a Host: ssc remove/-r/r  NAME"
+	echo -e "List all exist hosts: ssc list/ls/show"
+	echo -e "Print Version and info: ssc version/-v/v/-V"
+	echo -e "Print this message and exit: ssc help/-h/h"
 }
 
 do_show_version() {
 	echo "Create by Arash Shams <xsysxpert@gmail.com>" 
-	echo "Version 1.5 Stable"
+	echo "Version 1.6 Stable"
 	echo "Fork me at Github <https://github.com/Ara4Sh/sshconfig>"
 }
 

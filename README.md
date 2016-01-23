@@ -1,4 +1,4 @@
-# sshconfig
+# sshconfig : ```ssc```
 Minimal command to Add/Remove/list ssh aliases in $HOME/.ssh/config
 
 to contribute please fork add your code and make a pull request. feel free to add something new and helpful
@@ -12,55 +12,51 @@ Available on Linux , BSD and OSX
 ##Add a Host:
 to add a host use the following command:
 
-``` sshconfig add NAME USERNAME HOSTNAME [IdentityKey] [PORT] ```
+``` ssc add NAME USERNAME HOSTNAME [IdentityKey] [PORT] ```
 
 
 #Example : 
 ##Add new Host block:
 To add one new Host block
-``` sshconfig add arash root 192.168.0.100 ```
-
-``` sshconfig add arash1 root 192.168.0.101 /home/arash/.ssh/id_rsa ```
-
-``` sshconfig add arash2 root 192.168.0.102 /home/arash/.ssh/id_rsa 2223 ```
-
-``` sshconfig add arash root 192.168.0.103 2222 ```
-
+``` ssc add arash root 192.168.0.100```
+```ssc add arash1 root 192.168.0.101 /home/arash/.ssh/id_rsa```
+```ssc add arash2 root 192.168.0.102 /home/arash/.ssh/id_rsa 2223```
 
 ##Remove a Host:
 To remove a Host just a name is enough
 
-``` sshconfig remove NAME ```
-
-``` sshconfig remove arash1 ```
+``` sshconfig remove NAME```
+``` ssc remove arash1 ```
 
 ##List Existing Hosts 
 Show Existing Hosts 
 
-``` sshconfig list ```
+``` ssc list ```
 
 Show information about a host
 
-``` sshconfig list HOST ```
-
-``` sshconfig list arash1 ```
+``` ssc list HOST ```
+``` ssc list arash1 ```
 
 ##Version and information 
 
-```sshconfig version```
+```ssc version```
 
 #Change log
-Version 1.5:
-- List now shows all hosts with full information
-- Show details of a host
-- Change checking process
-- Checking for host already exist
+Version 1.6:
+- Remove comments from confg file
+- New name : ssc
+- Now lists has colored output
+- New install script
+- Fixing config file in install script
  
 #To do:
 
+Adding autocomplete for bash and zsh
+
 Better documentation
 
-Colorful output
+~~Colorful output~~
 
 Connect to a host using sshconfig
 
