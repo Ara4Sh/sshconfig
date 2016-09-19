@@ -3,46 +3,63 @@ Minimal command to Add/Remove/list ssh aliases in $HOME/.ssh/config
 
 to contribute please fork add your code and make a pull request. feel free to add something new and helpful
 
-#Installation
-``` curl -L http://git.io/sshconfig | bash ```
+# Installation
+SSC is available on Linux , BSD and OSX
 
-Available on Linux , BSD and OSX
+```
+curl -L http://git.io/sshconfig | bash 
+```
  
-#Usage
-##Add a Host:
-to add a host use the following command:
+# Usage
 
-``` ssc add NAME USERNAME HOSTNAME [IdentityKey] [PORT] ```
+#### Add a Host(Alias) :
+```
+ssc add NAME USERNAME HOSTNAME [IdentityKey] [PORT]
+ssc add NAME USERNAME HOSTNAME [PORT]
+scc add NAME USERNAME HOSTNAME [IdentityKey]
+```
+PORT and Identitykey are optional , PORT is 22 by default and Identitykey is your ssh private key generating by ssh-keygen in $HOME/.ssh .
 
+Example : 
+``` 
+ssc add arash root 192.168.0.100
+ssc add arash1 root 192.168.0.101 /home/arash/.ssh/arash.pem
+ssc add arash2 root 192.168.0.102 /home/arash/.ssh/arash2.pem 2223
+```
 
-#Example : 
-##Add new Host block:
-To add one new Host block
-``` ssc add arash root 192.168.0.100```
-```ssc add arash1 root 192.168.0.101 /home/arash/.ssh/id_rsa```
-```ssc add arash2 root 192.168.0.102 /home/arash/.ssh/id_rsa 2223```
+#### Remove a Host(Alias) :
+```
+sshconfig remove NAME
+```
+Example :
+```
+ssc remove arash1
+ssc remove arash2
+```
+#### List Existing Hosts(Aliases) :
+List all Hosts(Aliases) :
+```
+ssc list
+```
 
-##Remove a Host:
-To remove a Host just a name is enough
+Show information for a Host(Alias) :
 
-``` sshconfig remove NAME```
-``` ssc remove arash1 ```
+```
+ssc list HOST
+```
+Example:
+```
+ssc list arash1
+>> Host  arash1  HostName  192.168.0.101  User  root  Port  22   IdentityKey   /home/arash/.ssh/arash.pem
+```
 
-##List Existing Hosts 
-Show Existing Hosts 
+#### Version and information 
 
-``` ssc list ```
+```
+ssc version
+```
 
-Show information about a host
-
-``` ssc list HOST ```
-``` ssc list arash1 ```
-
-##Version and information 
-
-```ssc version```
-
-#Change log
+# Change log
 Version 1.6:
 - Remove comments from confg file
 - New name : ssc
@@ -50,7 +67,7 @@ Version 1.6:
 - New install script
 - Fixing config file in install script
  
-#To do:
+# To do:
 
 Adding autocomplete for bash and zsh
 
@@ -66,5 +83,5 @@ Connect to a host using sshconfig
 
 ~~IdentityKey and Port conflicts~~
 
-#ScreenShot
+# ScreenShot
 ![alt scrsht](https://raw.githubusercontent.com/Ara4Sh/sshconfig/master/screenshot.png)
