@@ -69,19 +69,17 @@ Version 1.6:
  
 # To do:
 
-Adding autocomplete for bash and zsh
-
-Better documentation
-
-~~Colorful output~~
-
 Connect to a host using sshconfig
 
-~~adding more information when you use list command~~
+Better output
 
-~~duplicate entries~~
+Edit Host names
 
-~~IdentityKey and Port conflicts~~
+Search function with keyword
+
+Share config with other Administrators
+
+Adding autocomplete for bash and zsh
 
 # ScreenShot
 ![alt scrsht](https://raw.githubusercontent.com/Ara4Sh/sshconfig/master/screenshot.png)
