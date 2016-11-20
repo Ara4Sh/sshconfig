@@ -1,3 +1,9 @@
+Version 1.7:
+- Using ssc to Connect to server
+- Search with keywords
+- New output messages (Success , Error , Print)
+- New command aliases ( -l , -s  for example )
+
 Version 1.6:
 - Remove comments from confg file
 - New name : ssc

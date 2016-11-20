@@ -22,9 +22,9 @@ PORT and Identitykey are optional , PORT is 22 by default and Identitykey is you
 
 Example : 
 ``` 
-ssc add arash root 192.168.0.100
-ssc add arash1 root 192.168.0.101 /home/arash/.ssh/arash.pem
-ssc add arash2 root 192.168.0.102 /home/arash/.ssh/arash2.pem 2223
+ssc add elastix root 192.168.0.100
+ssc add nginx root 192.168.0.101 /home/arash/.ssh/arash.pem
+ssc add aws-haproxy root 192.168.0.102 /home/arash/.ssh/arash2.pem 2223
 ```
 
 #### Remove a Host(Alias) :
@@ -33,8 +33,8 @@ sshconfig remove NAME
 ```
 Example :
 ```
-ssc remove arash1
-ssc remove arash2
+ssc remove nginx
+ssc remove aws-haproxy
 ```
 #### List Existing Hosts(Aliases) :
 List all Hosts(Aliases) :
@@ -49,8 +49,20 @@ ssc list HOST
 ```
 Example:
 ```
-ssc list arash1
->> Host  arash1  HostName  192.168.0.101  User  root  Port  22   IdentityKey   /home/arash/.ssh/arash.pem
+ssc list aws-haproxy
+>> Host: aws-haproxy  HostName: 192.168.0.102  User: root  Port: 22   IdentityKey: /home/arash/.ssh/arash.pem
+```
+#### Search for a Host
+```
+ssc search haproxy
+>> Host: haproxy-pars Hostname: 192.168.0.151 User: arash Port: 22 
+>> Host: haproxy-afra Hostname: 192.168.1.151 User: arash Port: 22 
+>> Host: aws-haproxy Hostname: 192.168.1.102 User: root Port: 22 
+```
+#### Connect to a Host 
+You can connect to a host if exist: 
+```
+ssc aws-lsb
 ```
 
 #### Version and information 
@@ -60,26 +72,17 @@ ssc version
 ```
 
 # Change log
-Version 1.6:
-- Remove comments from confg file
-- New name : ssc
-- Now lists has colored output
-- New install script
-- Fixing config file in install script
+Version 1.7:
+- Using ssc to Connect to server
+- Search with keywords
+- New output messages (Success , Error , Print)
+- New command aliases ( -l , -s  for example )
  
 # To do:
 
-Connect to a host using sshconfig
-
-Better output
-
 Edit Host names
 
-Search function with keyword
-
 Share config with other Administrators
-
-Adding autocomplete for bash and zsh
 
 # ScreenShot
 ![alt scrsht](https://raw.githubusercontent.com/Ara4Sh/sshconfig/master/screenshot.png)
