@@ -47,8 +47,8 @@ elif [[ -f sshconfig && $oldsshconfig = 0 ]];then
 	system "sudo rm -f $sshconfig"
 else
 	echo -e "Seems this is your first time using SSHCONFIG\n"
-	echo -e "Please Remember each block of Host in your ~/.ssh/config file"
-	echo -e "must seperate with a white space if not SSHCONFIG cant work correctly"
+	echo -e "Please remember that host blocks in your ~/.ssh/config file"
+	echo -e "must be seperated with an empty line. Else SSHCONFIG can't work correctly"
 	echo -e "for example\n"
 	echo -e "Host arash
 	HostName 172.18.0.2
