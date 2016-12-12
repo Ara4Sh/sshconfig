@@ -77,7 +77,7 @@ else
 	exit 1
 fi
 system "sudo chmod 755 /usr/local/bin/ssc"
-system "ln -s /usr/local/bin/ssc /usr/local/bin/sshconfig"
+system "sudo ln -s /usr/local/bin/ssc /usr/local/bin/sshconfig"
 if [[ $? -eq 0 ]]; then
 	echo "Thank you for using sshconfig , Now you can run \"ssc help\""
 else
