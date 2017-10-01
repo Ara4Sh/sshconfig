@@ -32,7 +32,7 @@ do_check_names() {
 
 success() {
 	printf "\n  \033[32mSuccess: %s\033[0m\n\n" "$@"
-	exit 0
+	# exit 0
 }
 
 error() {
@@ -106,7 +106,7 @@ do_remove_process() {
     if [[ $(do_check_names | grep --count "^$name$") != 0 ]]; then
 	sed -ie "/^Host $name$/,/^$/d" $CONFIGFILE
 	success "\"$name\" Removed successfully"
-    	exit 0
+    	# exit 0
     else
 	error "Sorry, \"$name\" is not in list"
     fi
@@ -139,8 +139,19 @@ do_search_process() {
 	ssc ls | grep $name
 }
 
+do_edit_process() {
+    name=$2
+    do_search_process search $name
+    echo "Now, Enter new values ($(ssc | grep -i add | awk -F"-a" '{print $2}'))"
+    read new_name user host identity port
+    do_remove_process remove $name 1>/dev/null
+    do_add_process add $new_name $user $host $identity $port 1>/dev/null
+    success "\"${name}\" successfully edited."
+}
+
 do_show_usage() {
 	print "Add" "ssc add/-a NAME USERNAME HOSTNAME [IdentityKey] [PORT] "
+  print "Edit" "ssc edit/-e NAME"
 	print "Remove" "ssc remove/-r/rm  NAME"
 	print "List" "ssc list/-l/ls [NAME]"
 	print "Search" "ssc search/-s NAME"
@@ -170,6 +181,9 @@ case $action in
 	version | -v)
 	    do_show_version
 	    ;;
+  edit | -e)
+      do_edit_process $@
+      ;;
 	help | -h)
 	    do_show_usage
 	    ;;
@@ -180,3 +194,5 @@ case $action in
 	    do_show_version
 	    ;;
 esac
+
+exit 0
