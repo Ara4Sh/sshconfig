@@ -13,14 +13,15 @@
 #
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-sshconfig=`which sshconfig`
+sshconfig=`which ssc`
 CONFIGFILE="$HOME/.ssh/config"
 BACKUPFILE="$HOME/.ssh/config.bak"
 TEMPFILE="$HOME/.ssh/.install.tmp"
+VERSION="1.7"
 #Setup source url
 src="https://raw.githubusercontent.com/Ara4Sh/sshconfig/master/sshconfig"
 
-#Setup log file 
+#Setup log file
 LOG=/tmp/sshconfig.install.log
 
 #Checking for dependencies
@@ -33,7 +34,7 @@ system() {
     eval "$@" 2>> $LOG
 }
 
-if [[ -f $sshconfig ]] && [[ $(sshconfig -v | grep --count 1.[1..5]) != 0 ]]; then
+if [[ -f $sshconfig ]] && [[ $(ssc -v | grep -i version | cut -d":" -f2 | cut -d" " -f3) -lt ${VERSION} ]]; then
 	echo "you are using old sshconfig, in 5 seconds your sshconfig will be upgrade and your config file ready to use or you can use CTRL-C to cancel"
 	sleep 5
 	system "cp $CONFIGFILE $BACKUPFILE"
@@ -41,10 +42,11 @@ if [[ -f $sshconfig ]] && [[ $(sshconfig -v | grep --count 1.[1..5]) != 0 ]]; th
 	system "sed '/^$/N;/^\n$/D' $TEMPFILE > $CONFIGFILE"
 	system "rm $TEMPFILE"
 	system "sudo rm -f $sshconfig"
-elif [[ -f sshconfig && $oldsshconfig = 0 ]];then
-	echo "sshconfig already installed, in 5 seconds it will be upgrade or you can use CTRL-C to cancel"
+elif [[ -f sshconfig ]];then
+	echo "sshconfig already installed."
+  echo "Happy ssh :-)"
 	sleep 5
-	system "sudo rm -f $sshconfig"
+  exit 0
 else
 	echo -e "Seems this is your first time using SSHCONFIG\n"
 	echo -e "Please remember that host blocks in your ~/.ssh/config file"
@@ -55,7 +57,7 @@ else
 	User	root
 	Port	22
 	Identity /home/arash/arash.pem
-	
+
 Host shams
 	HostName 172.18.0.3
 	User root
@@ -76,10 +78,15 @@ else
 	echo "cURL and wget not found! please install one of them"
 	exit 1
 fi
+
+system "rm /usr/local/bin/ssc"
 system "sudo chmod 755 /usr/local/bin/ssc"
-system "sudo ln -s /usr/local/bin/ssc /usr/local/bin/sshconfig"
+system "sudo ln -s /usr/local/bin/ssc /usr/local/bin/ssc"
 if [[ $? -eq 0 ]]; then
 	echo "Thank you for using sshconfig , Now you can run \"ssc help\""
+  exit 0
 else
 	echo "Something wrong!!"
+  exit 1
 fi
+
