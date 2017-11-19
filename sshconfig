@@ -116,13 +116,13 @@ do_list_process() {
     if [ -n "$2" ]; then
      	name=$2
 	if [[ $(do_check_names | grep --count "^$name$") != 0 ]]; then
-		awk -v name="$name" -v green="\033[0;32m" -v reset="\033[0m" -v RS='' 'index($0, name) { for (i = 1; i < NF; i += 2) { printf("%s%s%s: %s%s", green, $i, reset, $(i + 1), (i < NF -2)? "  ": "\n") } exit }' $CONFIGFILE
+		awk -v name="$name" -v green="\033[0;32m" -v reset="\033[0m" -v RS='' 'index($0, name) { for (i = 1; i < NF; i += 2) { printf("%s%s%s: %s%s", green, $i, reset, $(i + 1), (i < NF -2)? "  ": "\n") } exit }' $CONFIGFILE 
 		exit 0
 	else
 		error "Sorry, \"$name\" is not in list"
 	fi
     else
-	 awk -v name="$name" -v green="\033[0;32m" -v reset="\033[0m" -v RS='' '{ for (i = 1; i < NF; i += 2) { printf("%s%s%s: %s\t%s", green, $i, reset, $(i + 1), (i < NF -2)? "  ": "\n") } }' $CONFIGFILE
+	 awk -v name="$name" -v green="\033[0;32m" -v reset="\033[0m" -v RS='' '{ for (i = 1; i < NF; i += 2) { printf("%s%s%s: %s\t%s", green, $i, reset, $(i + 1), (i < NF -2)? "  ": "\n") } }' $CONFIGFILE | column -t
     fi
 }
 
@@ -141,12 +141,15 @@ do_search_process() {
 
 do_edit_process() {
     name=$2
-    do_search_process search $name
-    echo "Now, Enter new values ($(ssc | grep -i add | awk -F"-a" '{print $2}'))"
-    read new_name user host identity port
-    do_remove_process remove $name 1>/dev/null
-    do_add_process add $new_name $user $host $identity $port 1>/dev/null
-    success "\"${name}\" successfully edited."
+    if [[ $(do_check_names | grep --count "^$name$") != 0 ]]; then
+        echo "Now, Enter new values ($(ssc | grep -i add | awk -F"-a" '{print $2}'))"
+        read new_name user host identity port
+        do_remove_process remove $name 1>/dev/null
+        do_add_process add $new_name $user $host $identity $port 1>/dev/null
+        success "\"${name}\" successfully edited."
+    else
+        error "Sorry, \"$name\" is not in list"
+    fi
 }
 
 do_show_usage() {
@@ -160,7 +163,7 @@ do_show_usage() {
 }
 
 do_show_version() {
-	print "Version" "Version 1.7 Stable"
+	print "Version" "Version 1.8 Stable"
 	print "Contribute" "Fork me at Github <https://github.com/Ara4Sh/sshconfig>"
 }
 

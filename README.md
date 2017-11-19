@@ -64,6 +64,11 @@ You can connect to a host if exist:
 ```
 ssc aws-lsb
 ```
+#### Edit a Host
+Experimental feature 
+```
+ssc edit nginx-front
+```
 
 #### Version and information 
 
@@ -72,16 +77,12 @@ ssc version
 ```
 
 # Change log
-Version 1.7:
-- Using ssc to Connect to server
-- Search with keywords
-- New output messages (Success , Error , Print)
-- New command aliases ( -l , -s  for example )
+Version 1.8:
+- New installer file 
+- Edit option included (testing)
+- pretty output
  
 # To do:
-
-Edit Host names
-
 Share config with other Administrators
 
 # ScreenShot

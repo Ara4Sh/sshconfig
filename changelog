@@ -1,3 +1,8 @@
+Version 1.8:
+- New installer file 
+- Edit option included (testing)
+- pretty output
+
 Version 1.7:
 - Using ssc to Connect to server
 - Search with keywords
