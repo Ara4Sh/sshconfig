@@ -1,0 +1,40 @@
+# ssc completion                             -*- shell-script -*-
+
+_ssc()
+{
+    local cur words
+    _init_completion || return
+
+    local COMMANDS=(
+        "add"
+        "edit"
+        "help"
+        "list"
+        "remove"
+        "search"
+        "version"
+        )
+
+    local command i
+    for (( i=0; i < ${#words[@]}-1; i++ )); do
+        if [[ ${COMMANDS[@]} =~ ${words[i]} ]]; then
+            command=${words[i]}
+            break
+        fi
+    done
+    
+    case $prev in
+        edit|remove)
+            host_list=$(grep -oP 'Host\s+\K\S+' $HOME/.ssh/config)
+            COMPREPLY=( $( compgen -W "$host_list" -- "$cur" ) )
+                return 0
+            ;;
+    esac
+    
+    if [ "$command" = "" ]; then
+        COMPREPLY=( $( compgen -W '${COMMANDS[@]}' -- "$cur" ) )
+    fi
+
+    return 0
+} &&
+complete -F _ssc ssc
