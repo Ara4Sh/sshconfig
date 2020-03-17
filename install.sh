@@ -74,16 +74,23 @@ if [[ ! -f $sudo ]]; then
 	exit 1
 fi
 
+out="/usr/bin/ssc"
+outln="/usr/bin/sshconfig"
+if [ "$(uname)" == "Darwin" ]; then
+    out='/usr/local/bin/ssc'
+	outln='/usr/local/bin/sshconfig'
+fi
+
 if [[ -f $wget ]]; then
-	system "sudo $wget -O /usr/bin/ssc $src"
+	system "sudo $wget -O $out $src"
 elif [[ -f $curl ]]; then
-	system "sudo $curl -o /usr/bin/ssc $src"
+	system "sudo $curl -o $out $src"
 else
 	error "cURL and wget not found! please install one of them"
 	exit 1
 fi
-system "sudo chmod 755 /usr/bin/ssc"
-system "sudo ln -s /usr/bin/ssc /usr/bin/sshconfig"
+system "sudo chmod 755 $out"
+system "sudo ln -s $out $outln"
 if [[ $? -eq 0 ]]; then
 	success "Thank you for using sshconfig , Now run \"ssc help\""
 else
