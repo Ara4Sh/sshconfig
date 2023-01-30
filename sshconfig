@@ -152,12 +152,53 @@ do_edit_process() {
     fi
 }
 
+do_iterm_process() {
+	name=$2
+	if [[ $(do_check_names | grep --count "^$name$") == 0 ]]; then
+		error "Sorry, \"$name\" is not in list"
+	fi
+	
+	ITERMFOLDER="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+	PROFILEFILE="$ITERMFOLDER/Profiles.json"
+
+	if [ ! -d "${ITERMFOLDER}" ]; then
+		error "iTerm folder could not be found"
+	fi
+
+	if [ ! -f "${PROFILEFILE}" ]; then
+		echo '{"Profiles": []}' >> "$PROFILEFILE"
+	fi
+
+	if ! command -v jq &> /dev/null; then
+		error "jq utility could not be found"
+	fi
+
+	EXIST=$(cat "$PROFILEFILE" | jq ".Profiles[] | select(.Guid==\"$name\")")
+	if [[ ${#EXIST} != 0 ]]; then
+		error "\"$name\" profile already exist"
+	fi
+
+	read -d '' PROFILE << EOB
+[{
+	"Guid" : "$name",
+	"Name" : "$name",
+	"ShortCut" : "",
+	"Custom Command" : "Yes",
+	"Command" : "ssh $name"
+}]
+EOB
+
+	echo $(cat "$PROFILEFILE" | jq ".Profiles |= .+ $PROFILE") > "$PROFILEFILE"
+	success "\"${name}\" successfully installed into iTerm2."
+}
+
 do_show_usage() {
 	print "Add" "ssc add/-a NAME USERNAME HOSTNAME [IdentityKey] [PORT] "
-  print "Edit" "ssc edit/-e NAME"
+	print "Edit" "ssc edit/-e NAME"
 	print "Remove" "ssc remove/-r/rm  NAME"
 	print "List" "ssc list/-l/ls [NAME]"
 	print "Search" "ssc search/-s NAME"
+	print "ITerm" "ssc iterm/-i NAME"
 	print "Version" "ssc version/-v"
 	print "Help" "ssc help/-h"
 }
@@ -181,12 +222,15 @@ case $action in
 	search | -s)
 	    do_search_process $@
 	    ;;
+	iterm | -i)
+	    do_iterm_process $@
+	    ;;
 	version | -v)
 	    do_show_version
 	    ;;
-  edit | -e)
-      do_edit_process $@
-      ;;
+	edit | -e)
+	    do_edit_process $@
+	    ;;
 	help | -h)
 	    do_show_usage
 	    ;;
