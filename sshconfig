@@ -141,20 +141,53 @@ do_search_process() {
 
 do_edit_process() {
     name=$2
-    if [[ $(do_check_names | grep --count "^$name$") != 0 ]]; then
-        echo "Now, Enter new values ($(ssc | grep -i add | awk -F"-a" '{print $2}'))"
-        read new_name user host identity port
-        do_remove_process remove $name 1>/dev/null
-        do_add_process add $new_name $user $host $identity $port 1>/dev/null
-        success "\"${name}\" successfully edited."
-    else
-        error "Sorry, \"$name\" is not in list"
-    fi
+	while [[ -z ${name} ]]; do
+		echo -n "Name: "
+		read name
+	done
+	add_new=1
+	if [[ $(do_check_names | grep --count "^$name$") == 0 ]]; then
+		echo "You don't have any host with given name. Please check it again OR you can add new one with continue the procedure."
+		add_new=0
+	fi
+	do_easy_input $name
+	if [[ ${add_new} != 0 ]]; then
+	    do_remove_process remove $name 1>/dev/null
+	fi
+    do_add_process add $name $username $hostname $identity $port 1>/dev/null
+    success "\"${name}\" successfully edited/added."
+}
+
+do_easy_input() {
+    name=$1
+	while [[ -z ${name} ]]; do
+		echo -n "Name: "
+		read name
+	done
+	echo -n "Username [root]: "
+	read username
+	[[ -z ${username} ]] && username="root"
+	echo -n "Hostname [127.0.0.1]: "
+	read hostname
+	[[ -z ${hostname} ]] && hostname="127.0.0.1"
+	echo -n "Identity key [~/.ssh/id_rsa]: "
+	read IDENTITY
+	[[ -z ${idnetity} ]] && identiry="~/.ssh/id_rsa"
+	echo -n "PORT [22]: "
+	read port
+	[[ -z ${port} ]] && port="22"
+	echo -n "Forward agent [Y/n]: "
+	read forward
+	[[ -z ${forward} ]] && forward="yes"
+	echo -n "Strict hostkey checking [y/N]: "
+	read strict
+	[[ -z ${strict} ]] && strict="no"
+	echo ${name} ${username} ${hostname} ${identity} ${port} ${forward} ${strict}
 }
 
 do_show_usage() {
 	print "Add" "ssc add/-a NAME USERNAME HOSTNAME [IdentityKey] [PORT] "
-  print "Edit" "ssc edit/-e NAME"
+    print "Edit" "ssc edit/-e NAME"
 	print "Remove" "ssc remove/-r/rm  NAME"
 	print "List" "ssc list/-l/ls [NAME]"
 	print "Search" "ssc search/-s NAME"
