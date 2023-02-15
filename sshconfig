@@ -171,7 +171,7 @@ do_easy_input() {
 	read hostname
 	[[ -z ${hostname} ]] && hostname="127.0.0.1"
 	echo -n "Identity key [~/.ssh/id_rsa]: "
-	read IDENTITY
+	read identity
 	[[ -z ${idnetity} ]] && identiry="~/.ssh/id_rsa"
 	echo -n "PORT [22]: "
 	read port
