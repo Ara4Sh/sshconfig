@@ -116,7 +116,7 @@ do_list_process() {
     if [ -n "$2" ]; then
      	name=$2
 	if [[ $(do_check_names | grep --count "^$name$") != 0 ]]; then
-		awk -v name="$name" -v green="\033[0;32m" -v reset="\033[0m" -v RS='' 'index($0, name) { for (i = 1; i < NF; i += 2) { printf("%s%s%s: %s%s", green, $i, reset, $(i + 1), (i < NF -2)? "  ": "\n") } exit }' $CONFIGFILE 
+		awk -v name="$name" -v green="\033[0;32m" -v reset="\033[0m" -v RS='' 'index($0, name) { for (i = 1; i < NF; i += 2) { printf("%s%s%s: %s%s", green, $i, reset, $(i + 1), (i < NF -2)? " ": "\n") } exit }' $CONFIGFILE 
 		exit 0
 	else
 		error "Sorry, \"$name\" is not in list"
@@ -150,11 +150,14 @@ do_edit_process() {
 		echo "You don't have any host with given name. Please check it again OR you can add new one with continue the procedure."
 		add_new=0
 	fi
-	do_easy_input $name
+	if [[ ${add_new} != 0 ]]; then
+		read -r old_name old_host old_user old_port old_identity old_forward old_strict <<< $(do_list_process "Just to fill in the first argument." ${name} | cut -d" " -f 2,4,6,8,10,12,14)
+	fi
+	do_easy_input $name $old_host $old_user $old_port $old_identity $old_forward $old_strict
 	if [[ ${add_new} != 0 ]]; then
 	    do_remove_process remove $name 1>/dev/null
 	fi
-    do_add_process add $name $username $hostname $identity $port 1>/dev/null
+    do_add_process add $new_name $username $hostname $identity $port 1>/dev/null
     success "\"${name}\" successfully edited/added."
 }
 
@@ -164,25 +167,34 @@ do_easy_input() {
 		echo -n "Name: "
 		read name
 	done
-	echo -n "Username [root]: "
+	echo -n "Name [${name}]: "
+	read new_name
+	[[ -z ${new_name} ]] && new_name=${name}
+	current_username=$([[ ! -z ${3} ]] && echo ${3} || echo "root")
+	echo -n "Username [${current_username}]: "
 	read username
-	[[ -z ${username} ]] && username="root"
-	echo -n "Hostname [127.0.0.1]: "
+	[[ -z ${username} ]] && username="${current_username}"
+	current_hostname=$([[ ! -z ${2} ]] && echo ${2} || echo "127.0.0.1")
+	echo -n "Hostname [${current_hostname}]: "
 	read hostname
-	[[ -z ${hostname} ]] && hostname="127.0.0.1"
-	echo -n "Identity key [~/.ssh/id_rsa]: "
-	read IDENTITY
-	[[ -z ${idnetity} ]] && identiry="~/.ssh/id_rsa"
-	echo -n "PORT [22]: "
+	[[ -z ${hostname} ]] && hostname="${current_hostname}"
+	current_identity=$([[ ! -z ${5} ]] && echo ${5} || echo "~/.ssh/id_rsa")
+	echo -n "Identity key [${current_identity}]: "
+	read identity
+	[[ -z ${identity} ]] && identity="${current_identity}"
+	current_port=$([[ ! -z ${4} ]] && echo ${4} || echo "22")
+	echo -n "PORT [${current_port}]: "
 	read port
-	[[ -z ${port} ]] && port="22"
-	echo -n "Forward agent [Y/n]: "
+	[[ -z ${port} ]] && port="${current_port}"
+	current_forward=$([[ ! -z ${6} ]] && echo ${6} || echo "yes")
+	echo -n "Forward agent [${current_forward}]: "
 	read forward
-	[[ -z ${forward} ]] && forward="yes"
-	echo -n "Strict hostkey checking [y/N]: "
+	[[ -z ${forward} ]] && forward="${current_forward}"
+	current_strict=$([[ ! -z ${7} ]] && echo ${7}|| echo "no")
+	echo -n "Strict hostkey checking [${current_strict}]: "
 	read strict
-	[[ -z ${strict} ]] && strict="no"
-	echo ${name} ${username} ${hostname} ${identity} ${port} ${forward} ${strict}
+	[[ -z ${strict} ]] && strict="${current_strict}"
+	echo ${new_name} ${username} ${hostname} ${identity} ${port} ${forward} ${strict}
 }
 
 do_iterm_process() {
